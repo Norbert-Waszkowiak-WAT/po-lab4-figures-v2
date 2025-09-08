@@ -38,6 +38,22 @@ TEST_CASE("Group equals method", "[Group]") {
     REQUIRE(group1.equals(group2));
 }
 
+TEST_CASE("Group nie jest równy innej grupie", "[Group]") {
+    Group group1;
+    Group group2;
+    Point p1(1.0, 2.0);
+    Point p2(3.0, 4.0);
+    Line line1(p1, p2);
+    group1.add(&line1);
+
+    Point p3(5.0, 6.0);
+    Point p4(7.0, 8.0);
+    Line line2(p3, p4);
+    group2.add(&line2);
+
+    REQUIRE_FALSE(group1.equals(group2));
+}
+
 TEST_CASE("Group flip method", "[Group]") {
     Group group;
     Point p1(1.0, 2.0);
@@ -72,6 +88,17 @@ TEST_CASE("Group move method", "[Group]") {
     REQUIRE(group.toString() == "Group(Line(Point(4.0, 5.0), Point(6.0, 7.0)), Line(Point(7.0, 8.0), Point(9.0, 10.0)), )");
 }
 
+TEST_CASE("Group toString po kilku operacjach", "[Group]") {
+    Group group;
+    Point p1(1.0, 2.0);
+    Point p2(3.0, 4.0);
+    Line line(p1, p2);
+    group.add(&line);
+    group.move(2.0, 2.0);
+    group.flip();
+    REQUIRE(group.toString() == "Group(Line(Point(-3.0, -4.0), Point(-5.0, -6.0)), )");
+}
+
 TEST_CASE("Group getSurface method", "[Group]") {
     Group group;
     Point p1(0.0, 0.0);
@@ -94,4 +121,21 @@ TEST_CASE("Group getSurface method", "[Group]") {
     group.add(&quad2);
     group.add(&triangle2);
     REQUIRE(group.getSurface() == Catch::Approx(44.0));
+}
+
+TEST_CASE("Group getSurface dla pustej grupy", "[Group]") {
+    Group group;
+    REQUIRE(group.getSurface() == Catch::Approx(0.0));
+}
+
+TEST_CASE("Group copy assignment operator", "[Group]") {
+    Group group1;
+    Point p1(1.0, 2.0);
+    Point p2(3.0, 4.0);
+    Line line(p1, p2);
+    group1.add(&line);
+
+    Group group2;
+    group2 = group1;
+    REQUIRE(group2.toString() == "Group(Line(Point(1.0, 2.0), Point(3.0, 4.0)), )");
 }

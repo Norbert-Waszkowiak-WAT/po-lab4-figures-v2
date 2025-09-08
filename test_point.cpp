@@ -59,3 +59,22 @@ TEST_CASE("Point toString method", "[Point]") {
     Point p2(-1.0, 2.5);
     REQUIRE(p2.toString() == "Point(-1.0, 2.5)");
 }
+
+TEST_CASE("Point copy assignment operator", "[Point]") {
+    Point p1(3.0, 4.0);
+    Point p2(0.0, 0.0);
+    p2 = p1;
+    REQUIRE(p2.toString() == "Point(3.0, 4.0)");
+
+    Point p3(-1.0, 2.5);
+    Point p4(0.0, 0.0);
+    p4 = p3;
+    REQUIRE(p4.toString() == "Point(-1.0, 2.5)");
+}
+
+TEST_CASE("Point toString dla -0.0", "[Point]") {
+    Point p1(-0.0, -0.0);
+    auto str = p1.toString();
+    bool ok = (str == "Point(-0.0, -0.0)" || str == "Point(0.0, 0.0)");
+    REQUIRE(ok);
+}

@@ -57,6 +57,22 @@ TEST_CASE("Quadrilateral equals method", "[Quadrilateral]") {
     REQUIRE(quad3.equals(quad4));
 }
 
+TEST_CASE("Quadrilateral nie jest równy innemu czworokątowi", "[Quadrilateral]") {
+    Point p1(1.0, 2.0);
+    Point p2(3.0, 4.0);
+    Point p3(5.0, 6.0);
+    Point p4(7.0, 8.0);
+    Quadrilateral quad1(p1, p2, p3, p4);
+
+    Point p5(9.0, 10.0);
+    Point p6(11.0, 12.0);
+    Point p7(13.0, 14.0);
+    Point p8(15.0, 16.0);
+    Quadrilateral quad2(p5, p6, p7, p8);
+
+    REQUIRE_FALSE(quad1.equals(quad2));
+}
+
 TEST_CASE("Quadrilateral flip method", "[Quadrilateral]") {
     Point p1(1.0, 2.0);
     Point p2(3.0, 4.0);
@@ -107,4 +123,32 @@ TEST_CASE("Quadrilateral getSurface method", "[Quadrilateral]") {
     Point p8(0.0, 4.0);
     Quadrilateral quad2(p5, p6, p7, p8);
     REQUIRE(quad2.getSurface() == Catch::Approx(12.0));
+}
+
+TEST_CASE("Quadrilateral copy assignment operator", "[Quadrilateral]") {
+    Point p1(1.0, 2.0);
+    Point p2(3.0, 4.0);
+    Point p3(5.0, 6.0);
+    Point p4(7.0, 8.0);
+    Quadrilateral quad1(p1, p2, p3, p4);
+
+    Quadrilateral quad2(Point(0.0, 0.0), Point(0.0, 0.0), Point(0.0, 0.0), Point(0.0, 0.0));
+    quad2 = quad1;
+    REQUIRE(quad2.toString() == "Quadrilateral(Point(1.0, 2.0), Point(3.0, 4.0), Point(5.0, 6.0), Point(7.0, 8.0))");
+}
+
+TEST_CASE("Quadrilateral toString po kilku operacjach", "[Quadrilateral]") {
+    Point p1(2.0, 3.0);
+    Point p2(4.0, 5.0);
+    Point p3(6.0, 7.0);
+    Point p4(8.0, 9.0);
+    Quadrilateral quad(p1, p2, p3, p4);
+    quad.move(-2.0, -3.0);
+    quad.flip();
+    auto str = quad.toString();
+    bool ok = (
+        str == "Quadrilateral(Point(-0.0, -0.0), Point(-2.0, -2.0), Point(-4.0, -4.0), Point(-6.0, -6.0))" ||
+        str == "Quadrilateral(Point(0.0, 0.0), Point(-2.0, -2.0), Point(-4.0, -4.0), Point(-6.0, -6.0))"
+    );
+    REQUIRE(ok);
 }
